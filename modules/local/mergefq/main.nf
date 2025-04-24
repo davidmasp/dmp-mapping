@@ -9,8 +9,8 @@ process MERGE {
 
     script:
     """
-    zcat ${reads1} | gzip -c > ${meta.id}_mergedr1.fastq.gz
-    zcat ${reads2} | gzip -c > ${meta.id}_mergedr2.fastq.gz 
+    cat ${reads1} > ${meta.id}_mergedr1.fastq.gz
+    cat ${reads2} > ${meta.id}_mergedr2.fastq.gz 
     """
 }
 
