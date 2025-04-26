@@ -17,8 +17,6 @@ workflow FQPP {
                 info["lane"] = lane
                 tuple(info, [read1, read2])
         }
-    // is this gonna work?
-    fastqc_input.view()
 
     FASTQC(fastqc_input)
     FASTP(fastqc_input, [], false, false, false)
