@@ -1,6 +1,6 @@
 
 
-process MERGE {
+process MERGEBAM {
     input:
     tuple val(meta), val(lanes), path(reads1), path(reads2)
 
@@ -9,8 +9,7 @@ process MERGE {
 
     script:
     """
-    cat ${reads1} > ${meta.id}_mergedr1.fastq.gz
-    cat ${reads2} > ${meta.id}_mergedr2.fastq.gz 
+    exit 1
     """
 }
 

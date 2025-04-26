@@ -1,4 +1,6 @@
 
+// helpers
+include { MERGEBAM } from '../modules/local/mergebam'
 
 // genome
 include { BWAMEM2_INDEX } from '../modules/nf-core/bwamem2/index/main' 
@@ -28,6 +30,16 @@ workflow MAP {
     }
 
     BWAMEM2_MEM(ch_fqs, bwa_index,[[:], fasta], true)
+    // we SHOULD MERGE HERE!
+    grouped_bam = BWAMEM2_MEM.out.bam \
+        | map {meta, bam -> 
+            meta.remove('lane')
+            tuple(meta, bam)
+        } 
+        | groupTuple(by: 0)
+    grouped_bam.view()
+    MERGEBAM(grouped_bam)
+
     GATK4_MARKDUPLICATES(BWAMEM2_MEM.out.bam, fasta, fai)
 
     metrics = metrics.mix(GATK4_MARKDUPLICATES.out.metrics)
