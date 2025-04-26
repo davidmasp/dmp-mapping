@@ -1,6 +1,6 @@
 
 // helpers
-include { MERGEBAM } from '../modules/local/mergebam'
+include { SAMTOOLS_MERGE } from '../modules/nf-core/samtools/merge/main'  
 
 // genome
 include { BWAMEM2_INDEX } from '../modules/nf-core/bwamem2/index/main' 
@@ -37,10 +37,9 @@ workflow MAP {
             tuple(meta, bam)
         } 
         | groupTuple(by: 0)
-    grouped_bam.view()
-    MERGEBAM(grouped_bam)
 
-    GATK4_MARKDUPLICATES(BWAMEM2_MEM.out.bam, fasta, fai)
+    SAMTOOLS_MERGE(grouped_bam, [[:], []], [[:], []])
+    GATK4_MARKDUPLICATES(SAMTOOLS_MERGE.out.bam, fasta, fai)
 
     metrics = metrics.mix(GATK4_MARKDUPLICATES.out.metrics)
     versions = versions.mix(GATK4_MARKDUPLICATES.out.versions)
