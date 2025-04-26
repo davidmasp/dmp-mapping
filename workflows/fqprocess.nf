@@ -5,8 +5,6 @@ include { FASTQC as FASTQC1} from '../modules/nf-core/fastqc'
 include { FASTQC as FASTQC2} from '../modules/nf-core/fastqc' 
 include { FASTP } from '../modules/nf-core/fastp'
 
-include { MERGE } from '../modules/local/mergefq'
-
 workflow FQPP {
     take:
      ch_fqs // queue: [mandatory] [ info, lane, fastq1, fastq2 ]

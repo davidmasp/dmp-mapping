@@ -9,7 +9,7 @@ include { BWAMEM2_INDEX } from '../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_MEM } from '../modules/nf-core/bwamem2/mem/main' 
 include { GATK4_MARKDUPLICATES } from '../modules/nf-core/gatk4/markduplicates/main'
 
-// needs params.bwaindex
+// needs params.bwa2index
 workflow MAP {
     take:
      ch_fqs // queue: [mandatory] [ info, [fastq1, fastq2]]
@@ -20,9 +20,9 @@ workflow MAP {
     metrics = Channel.empty()
     versions = Channel.empty()
 
-    if (params.bwaindex) {
+    if (params.bwa2index) {
         println("bwa index provided, skipping indexing")
-        bwa_index = [[:], file(params.bwaindex)]
+        bwa_index = [[:], file(params.bwa2index)]
     } else {
         println("bwa index NOT provided, creating...")
         BWAMEM2_INDEX([[:], fasta])
