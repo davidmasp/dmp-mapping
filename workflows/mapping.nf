@@ -9,6 +9,9 @@ include { BWAMEM2_INDEX } from '../modules/nf-core/bwamem2/index/main'
 include { BWAMEM2_MEM } from '../modules/nf-core/bwamem2/mem/main' 
 include { GATK4_MARKDUPLICATES } from '../modules/nf-core/gatk4/markduplicates/main'
 
+include { MOSDEPTH } from '../modules/nf-core/mosdepth/main'
+include { SAMTOOLS_INDEX } from '../modules/nf-core/samtools/index/main'
+
 // needs params.bwa2index
 workflow MAP {
     take:
@@ -40,10 +43,21 @@ workflow MAP {
 
     SAMTOOLS_MERGE(grouped_bam, [[:], []], [[:], []])
     GATK4_MARKDUPLICATES(SAMTOOLS_MERGE.out.bam, fasta, fai)
+    SAMTOOLS_INDEX(GATK4_MARKDUPLICATES.out.bam)
 
+    bambai_ch = GATK4_MARKDUPLICATES.out.bam \
+        | combine(SAMTOOLS_INDEX.out.bai) \
+        | map {meta, bam, bai -> 
+            tuple(meta, bam, bai, [])
+        }
+    MOSDEPTH(bambai_ch, [[:], []])
+    
     metrics = metrics.mix(GATK4_MARKDUPLICATES.out.metrics)
     versions = versions.mix(GATK4_MARKDUPLICATES.out.versions)
     versions = versions.mix(BWAMEM2_MEM.out.versions)
+    versions = versions.mix(SAMTOOLS_MERGE.out.versions)
+    versions = versions.mix(SAMTOOLS_INDEX.out.versions)
+    versions = versions.mix(MOSDEPTH.out.versions)
 
     emit:
      versions
