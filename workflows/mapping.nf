@@ -46,7 +46,7 @@ workflow MAP {
     SAMTOOLS_INDEX(GATK4_MARKDUPLICATES.out.bam)
 
     bambai_ch = GATK4_MARKDUPLICATES.out.bam \
-        | combine(SAMTOOLS_INDEX.out.bai) \
+        | combine(SAMTOOLS_INDEX.out.bai, by: 0) \
         | map {meta, bam, bai -> 
             tuple(meta, bam, bai, [])
         }
