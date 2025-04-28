@@ -4,3 +4,4 @@ index.csv
 .env
 .nextflow.log*
 .nextflow
+miniindex.csv
