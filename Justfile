@@ -39,3 +39,10 @@ test-run outdir='test_data/results':
         --outdir {{ outdir }} \
         -profile local,micromamba \
         -resume
+# runs bucle tasks
+bucle:
+    bucle run --reverse -v
+
+# lists bucle tasks
+bucle-list:
+    bucle list
