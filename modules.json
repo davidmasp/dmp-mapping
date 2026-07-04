@@ -30,6 +30,16 @@
             "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
             "installed_by": ["modules"]
           },
+          "minibwa/index": {
+            "branch": "master",
+            "git_sha": "838d07c09dfac095defc7b39c6b56ca9741ee517",
+            "installed_by": ["modules"]
+          },
+          "minibwa/map": {
+            "branch": "master",
+            "git_sha": "838d07c09dfac095defc7b39c6b56ca9741ee517",
+            "installed_by": ["modules"]
+          },
           "mosdepth": {
             "branch": "master",
             "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
