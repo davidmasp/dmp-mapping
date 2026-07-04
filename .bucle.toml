@@ -1,0 +1,136 @@
+[metadata]
+name = "dmp-mapping"
+preprompt = """
+This is a nextfow pipeline project with nf-core modules. Do not edit directly the code of the nextflow modules. Thye are in modules/nf-core and are handled automatically.
+"""
+postprompt = " "
+
+[agents.codex]
+cmd = "codex exec {{prompt}}"
+
+[agents.codexmini]
+cmd = "codex exec --model gpt-5.4-mini -c model_reasoning_effort=low {{prompt}}"
+
+## this is not working for some reason...
+[agents.bigpickle]
+cmd = "opencode run --model opencode/big-pickle {{prompt}}"
+
+[agents.opencode]
+cmd = "opencode run --model openai/gpt-5.5 {{prompt}}"
+
+[[tasks]]
+name = "fix-config-dup"
+agent = "codexmini"
+prompt = """
+
+Can you fix these two configs? I think there might be some duplication
+
+conf/modules/nfcore.config:73-86
+"""
+status = "success"
+
+[[tasks]]
+name = "add-minbwa"
+agent = "opencode"
+prompt = """
+Check the mapping workflow. I want to add the new minibwa process based on the new nf-core module.
+
+They are in the folder
+
+modules/nf-core/minibwa
+
+It's important that we have a parallel workflow so it with the bwa-mem2 process and in parallel with the minibwa one. Then in the main workflow we should have a conditional parameter to skip each of them if the user wants to. But if none of the parameters is set, then the pipeline runs both.
+
+Look at how it's set in another pipeline
+
+params.skip_smwf = false
+params.skip_ncmwf = false
+params.skip_covwf = false
+params.skip_rikerwf = false
+
+here it would be something like
+params.skip_bwa2 = false
+params.skip_minibwa = false
+
+To allow for this we should be able to add a meta field with a map just after SAMTOOLS_MERGE. This meta field should contain the name of the mapping process that was used.
+So either minibwa or bwa-mem2. Then in the publishing rules downstream, we will include this metaparameter. I would duplicate the import of the SAMTOOLS_MERGE so it can run twice.
+
+conf/modules/nfcore.config:41-61
+
+Here I would call it smth like "${params.outdir}/mapping/${meta.maptype}/gatk4/${meta.id}/"}
+
+The merged channel, from both minbwa and bwamem2 processes with the appropiate meta-parameter should be the final output of the mapping workflow. We will also move the duplicates (workflows/mapping.nf:48-55) part of the mapping workflow to a separate workflow, maybe postmapping?
+
+This new workflow keeps the same logic it just recieves a channel with mapped reads that includes a maptype in the meta-parameter. Because we change the publishing rule this should be no problem.
+"""
+status = "success"
+
+[[tasks]]
+name = "test-data-generation"
+agent = "opencode"
+prompt = """
+Check how i generate the test data with wgsim in the Justfile, look at these lines.
+
+Justfile:27-30
+
+Can you expand them so now it generates 2 sets of paired reads. Be sure to update the appropiate index accordingly.
+"""
+status = "success"
+
+[[tasks]]
+name = "fix-module-updates3"
+agent = "opencode"
+prompt = """
+
+When updating the nf-core modules, I think the MERGE process has different input arguments now, can you make sure that my pipieline is compatible with that.
+
+modules/nf-core/samtools/merge/main.nf:11-12
+
+Might be that the fasta and fai files are now wrap together. Be sure to update my workflows accordingly.
+"""
+status = "success"
+
+
+[[tasks]]
+name = "fix-module-updates2"
+agent = "opencode"
+prompt = """
+
+When updating the nf-core modules, I think the MOSDEPTH process has different input arguments now, can you make sure that my pipieline is compatible with that.
+
+modules/nf-core/mosdepth/main.nf:11-13
+
+If there is an extra required arguemnt that we don't use include a empty value, either dict or list depending on their test.
+"""
+status = "success"
+
+
+[[tasks]]
+name = "fix-module-updates"
+agent = "opencode"
+prompt = """
+
+When updating the nf-core modules, the following error was encountered:
+
+ERROR    Running 'nextflow inspect' failed with the following error:
+WARNING  Could not regenerate container configuration files: Command 'nextflow inspect -format json .' returned non-zero
+         error code '1':
+         >
+         Error workflows/fqprocess.nf:22:5: Incorrect number of call arguments, expected 4 but received 5
+         │  22 |     FASTP(fastqc_input, [], false, false, false)
+         ╰     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+         ERROR ~ Script compilation failed
+
+Check which argument we were including first that now is not relevant anymore and remove it.
+
+"""
+status = "success"
+
+[[tasks]]
+name = "readme-update"
+agent = "codexmini"
+prompt = "Check the codebase of this folder, then read the README file. Update it according to the newer functionality available"
+auto-reset = true
+status = "success"

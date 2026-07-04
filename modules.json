@@ -7,42 +7,52 @@
         "nf-core": {
           "bwamem2/index": {
             "branch": "master",
-            "git_sha": "a29f18660f5e3748d44d6f716241e70c942c065d",
+            "git_sha": "62ce917fd775aaef732eb82019de069c765adfd3",
             "installed_by": ["modules"]
           },
           "bwamem2/mem": {
             "branch": "master",
-            "git_sha": "a29f18660f5e3748d44d6f716241e70c942c065d",
+            "git_sha": "62ce917fd775aaef732eb82019de069c765adfd3",
             "installed_by": ["modules"]
           },
           "fastp": {
             "branch": "master",
-            "git_sha": "d082103d7976a2804f21225446cc110cbd822f4c",
+            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
             "installed_by": ["modules"]
           },
           "fastqc": {
             "branch": "master",
-            "git_sha": "b1966f36ec9de31927b2603d8f499960b2a4c294",
+            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
             "installed_by": ["modules"]
           },
           "gatk4/markduplicates": {
             "branch": "master",
-            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
+            "installed_by": ["modules"]
+          },
+          "minibwa/index": {
+            "branch": "master",
+            "git_sha": "838d07c09dfac095defc7b39c6b56ca9741ee517",
+            "installed_by": ["modules"]
+          },
+          "minibwa/map": {
+            "branch": "master",
+            "git_sha": "838d07c09dfac095defc7b39c6b56ca9741ee517",
             "installed_by": ["modules"]
           },
           "mosdepth": {
             "branch": "master",
-            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+            "git_sha": "999b9db1d6b8bdc591e1168e183f4cc87d6606f9",
             "installed_by": ["modules"]
           },
           "samtools/index": {
             "branch": "master",
-            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
             "installed_by": ["modules"]
           },
           "samtools/merge": {
             "branch": "master",
-            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
             "installed_by": ["modules"]
           }
         }

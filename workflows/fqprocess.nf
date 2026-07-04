@@ -11,19 +11,21 @@ workflow FQPP {
     main:
     versions = Channel.empty()
     // elongate fq
-    fastqc_input = ch_fqs \
+    fastq_input = ch_fqs \
         | map {
                 info, lane, read1, read2 -> 
                 info["lane"] = lane
                 tuple(info, [read1, read2])
         }
 
-    FASTQC(fastqc_input)
-    FASTP(fastqc_input, [], false, false, false)
+    fastp_input = fastq_input | map { meta, reads -> tuple(meta, reads, []) }
+
+    FASTQC(fastq_input)
+    FASTP(fastp_input, false, false, false)
     FASTQC2(FASTP.out.reads)
 
-    versions = versions.mix(FASTP.out.versions)
-    versions = versions.mix(FASTQC.out.versions)
+    versions = versions.mix(FASTP.out.versions_fastp)
+    versions = versions.mix(FASTQC.out.versions_fastqc)
 
     emit:
      fqreads = FASTP.out.reads
