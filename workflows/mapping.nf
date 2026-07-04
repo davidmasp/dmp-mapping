@@ -18,6 +18,7 @@ workflow MAP {
      ch_fqs // queue: [mandatory] [ info, [fastq1, fastq2]]
      fasta // value: [mandatory] [ .fa file]
      fai // value: [optional] [ .fai file]
+     gzi // value: [optional] [ .gzi file]
     main:
 
     metrics = Channel.empty()
@@ -37,27 +38,31 @@ workflow MAP {
     grouped_bam = BWAMEM2_MEM.out.bam \
         | map {meta, bam -> 
             meta.remove('lane')
-            tuple(meta, bam)
+            tuple(meta, bam, [])
         } 
-        | groupTuple(by: 0)
+        | groupTuple(by: 0) \
+        | map { meta, bam, index -> tuple(meta, bam, index.flatten()) }
 
-    SAMTOOLS_MERGE(grouped_bam, [[:], []], [[:], []])
+    SAMTOOLS_MERGE(grouped_bam, [[:], fasta, fai, gzi])
     GATK4_MARKDUPLICATES(SAMTOOLS_MERGE.out.bam, fasta, fai)
     SAMTOOLS_INDEX(GATK4_MARKDUPLICATES.out.bam)
 
     bambai_ch = GATK4_MARKDUPLICATES.out.bam \
-        | combine(SAMTOOLS_INDEX.out.bai, by: 0) \
+        | combine(SAMTOOLS_INDEX.out.index, by: 0) \
         | map {meta, bam, bai -> 
             tuple(meta, bam, bai, [])
         }
-    MOSDEPTH(bambai_ch, [[:], []])
+    MOSDEPTH(bambai_ch, [[], []], [])
     
     metrics = metrics.mix(GATK4_MARKDUPLICATES.out.metrics)
-    versions = versions.mix(GATK4_MARKDUPLICATES.out.versions)
-    versions = versions.mix(BWAMEM2_MEM.out.versions)
-    versions = versions.mix(SAMTOOLS_MERGE.out.versions)
-    versions = versions.mix(SAMTOOLS_INDEX.out.versions)
-    versions = versions.mix(MOSDEPTH.out.versions)
+    versions = versions.mix(GATK4_MARKDUPLICATES.out.versions_gatk4)
+    versions = versions.mix(GATK4_MARKDUPLICATES.out.versions_samtools)
+    versions = versions.mix(BWAMEM2_MEM.out.versions_bwamem2)
+    versions = versions.mix(BWAMEM2_MEM.out.versions_samtools)
+    versions = versions.mix(SAMTOOLS_MERGE.out.versions_samtools)
+    versions = versions.mix(SAMTOOLS_INDEX.out.versions_samtools)
+    versions = versions.mix(MOSDEPTH.out.versions_mosdepth)
+    versions = versions.mix(MOSDEPTH.out.versions_gzip)
 
     emit:
      versions

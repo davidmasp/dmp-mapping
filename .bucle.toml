@@ -29,9 +29,10 @@ Justfile:27-30
 
 Can you expand them so now it generates 2 sets of paired reads. Be sure to update the appropiate index accordingly.
 """
+status = "success"
 
 [[tasks]]
-name = "fix-module-updates2"
+name = "fix-module-updates3"
 agent = "opencode"
 prompt = """
 
@@ -41,6 +42,7 @@ modules/nf-core/samtools/merge/main.nf:11-12
 
 Might be that the fasta and fai files are now wrap together. Be sure to update my workflows accordingly.
 """
+status = "success"
 
 
 [[tasks]]
@@ -54,6 +56,7 @@ modules/nf-core/mosdepth/main.nf:11-13
 
 If there is an extra required arguemnt that we don't use include a empty value, either dict or list depending on their test.
 """
+status = "success"
 
 
 [[tasks]]
@@ -77,9 +80,11 @@ WARNING  Could not regenerate container configuration files: Command 'nextflow i
 Check which argument we were including first that now is not relevant anymore and remove it.
 
 """
+status = "success"
 
 [[tasks]]
 name = "readme-update"
 agent = "codexmini"
 prompt = "Check the codebase of this folder, then read the README file. Update it according to the newer functionality available"
 auto-reset = true
+status = "success"

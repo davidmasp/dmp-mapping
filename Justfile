@@ -23,11 +23,12 @@ test-ref outdir='test_data':
     samtools faidx '{{ outdir }}/mini_hg38.fa'
 
 
-# Generate paired test FASTQ files from a FASTA with wgsim.
+# Generate two paired test FASTQ sets from a FASTA with wgsim.
 test-fq fasta='test_data/mini_hg38.fa' outdir='test_data/wgsim' prefix='test' pairs='1000000':
     mkdir -p '{{ outdir }}'
-    wgsim -N {{ pairs }} -1 150 -2 150 -e 0.01 -r 0.00001 '{{ fasta }}' '{{ outdir }}/{{ prefix }}_1.fq' '{{ outdir }}/{{ prefix }}_2.fq'
-    gzip -f '{{ outdir }}/{{ prefix }}_1.fq' '{{ outdir }}/{{ prefix }}_2.fq'
+    wgsim -N {{ pairs }} -1 150 -2 150 -e 0.01 -r 0.00001 '{{ fasta }}' '{{ outdir }}/{{ prefix }}_L001_1.fq' '{{ outdir }}/{{ prefix }}_L001_2.fq'
+    wgsim -N {{ pairs }} -1 150 -2 150 -e 0.01 -r 0.00001 '{{ fasta }}' '{{ outdir }}/{{ prefix }}_L002_1.fq' '{{ outdir }}/{{ prefix }}_L002_2.fq'
+    gzip -f '{{ outdir }}/{{ prefix }}_L001_1.fq' '{{ outdir }}/{{ prefix }}_L001_2.fq' '{{ outdir }}/{{ prefix }}_L002_1.fq' '{{ outdir }}/{{ prefix }}_L002_2.fq'
 
 
 # Run the full pipeline locally with test data (wgsim FASTQs + mini_hg38 reference).

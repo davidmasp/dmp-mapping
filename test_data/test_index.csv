@@ -1,2 +1,3 @@
 info,lane,read1,read2
-id=test_sample,L001,test_data/wgsim/test_1.fq.gz,test_data/wgsim/test_2.fq.gz
+id=test_sample,L001,test_data/wgsim/test_L001_1.fq.gz,test_data/wgsim/test_L001_2.fq.gz
+id=test_sample,L002,test_data/wgsim/test_L002_1.fq.gz,test_data/wgsim/test_L002_2.fq.gz
