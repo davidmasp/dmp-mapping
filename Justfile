@@ -27,6 +27,7 @@ test-ref outdir='test_data':
 test-fq fasta='test_data/mini_hg38.fa' outdir='test_data/wgsim' prefix='test' pairs='1000000':
     mkdir -p '{{ outdir }}'
     wgsim -N {{ pairs }} -1 150 -2 150 -e 0.01 -r 0.00001 '{{ fasta }}' '{{ outdir }}/{{ prefix }}_1.fq' '{{ outdir }}/{{ prefix }}_2.fq'
+    gzip -f '{{ outdir }}/{{ prefix }}_1.fq' '{{ outdir }}/{{ prefix }}_2.fq'
 
 
 # Run the full pipeline locally with test data (wgsim FASTQs + mini_hg38 reference).
