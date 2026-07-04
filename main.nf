@@ -18,6 +18,7 @@ params.skip_minibwa = false
 
 include { FQPP } from './workflows/fqprocess'
 include { MAP } from './workflows/mapping'
+include { POSTMAPPING } from './workflows/postmapping'
 
 workflow  {
     fasta_file = file(params.genome)
@@ -45,6 +46,12 @@ workflow  {
         fasta_file,
         fai_file,
         gzi_file
+    )
+
+    POSTMAPPING(
+        MAP.out.mapped,
+        fasta_file,
+        fai_file
     )
 
 }
