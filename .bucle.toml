@@ -133,4 +133,3 @@ name = "readme-update"
 agent = "codexmini"
 prompt = "Check the codebase of this folder, then read the README file. Update it according to the newer functionality available"
 auto-reset = true
-status = "success"

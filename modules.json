@@ -25,11 +25,6 @@
             "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
             "installed_by": ["modules"]
           },
-          "gatk4/markduplicates": {
-            "branch": "master",
-            "git_sha": "6d46786420b4d7bc88eba026eb389c0c5535d120",
-            "installed_by": ["modules"]
-          },
           "minibwa/index": {
             "branch": "master",
             "git_sha": "838d07c09dfac095defc7b39c6b56ca9741ee517",
